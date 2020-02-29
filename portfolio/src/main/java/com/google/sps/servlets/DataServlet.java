@@ -19,15 +19,39 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-
+  private List<String> thanosQuotes;
+  
+  @Override
+  public void init(){
+      thanosQuotes = new ArrayList<>();
+      thanosQuotes.add("The hardest choices require the strongest wills.");
+      thanosQuotes.add("I ask you to what end? Dread it. Run from it. "+
+                         "Destiny arrives all "+
+                         "the same.");
+      thanosQuotes.add("I know what it's like to lose. "
+                       +"To feel so desperately that you're right, "+
+                       "yet to fail nonetheless. It's frightening, "+
+                       "turns the legs to jelly.");
+      thanosQuotes.add("Perfectly balanced, as all things should be.");
+      thanosQuotes.add("I do. You are not the only one cursed with knowledge.");
+      thanosQuotes.add("I finally rest and watch the sun rise on a grateful universe.");
+      thanosQuotes.add("Fine! I will do it myself.");
+      thanosQuotes.add("I ignored by destiny once. I cannot do that again, "+
+                        "even for you.");
+      thanosQuotes.add("With all the six stones I could simply snap and they "+
+                       "would cease to exist. I call that mercy");
+  }
+  
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html;");
-    response.getWriter().println("<h1>Hello You!</h1>");
-    response.getWriter().println("<p>You have discovered the secret side of Sena's portfolio. Enjoy!</p>");
+    String quote = thanosQuotes.get((int) (Math.random() * thanosQuotes.size()));
+    response.getWriter().println(quote);
+    //response.getWriter().println("<p>You have discovered the secret side of Sena's portfolio. Enjoy!</p>");
   }
 }

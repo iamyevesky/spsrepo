@@ -26,3 +26,11 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greetingContainer');
   greetingContainer.innerText = greeting;
 }
+
+function getThanosQuote(){
+    fetch("/data").then(response => response.text()).then(quote => 
+    {
+        var thanosSection = document.getElementById("quoteSection");
+        thanosSection.innerText = quote;
+    });
+}
