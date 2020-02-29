@@ -34,3 +34,24 @@ function getThanosQuote(){
         thanosSection.innerText = quote;
     });
 }
+
+function getJSONobject(){
+    fetch("/data").then(response => response.json()).then(object =>
+    {
+        var quoteSection = document.getElementById("quoteSection");
+        buildList(quoteSection, object);
+    })
+}
+
+function buildList(htmlObject, jsonObject){
+    htmlObject.innerHTML = '';
+    for(let i = 0; i < jsonObject.length; i++){
+        htmlObject.appendChild(createListElement(jsonObject[i]));
+    }
+}
+
+function createListElement(string){
+    var element = document.createElement("li");
+    element.textContent = string;
+    return element;
+}

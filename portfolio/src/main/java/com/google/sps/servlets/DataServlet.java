@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
+import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -49,9 +50,17 @@ public class DataServlet extends HttpServlet {
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    String quote = thanosQuotes.get((int) (Math.random() * thanosQuotes.size()));
-    response.getWriter().println(quote);
-    //response.getWriter().println("<p>You have discovered the secret side of Sena's portfolio. Enjoy!</p>");
+    response.setContentType("application/json;");
+    response.getWriter().println(convertToJSON(thanosQuotes));
   }
+
+  /** Returns any Java object in JSON format
+   * 
+   * @param object: Object to be converted
+   * @return String JSON format of the object
+   */
+   private String convertToJSON(Object object){
+       Gson gson = new Gson();
+       return gson.toJson(object);
+   }
 }
