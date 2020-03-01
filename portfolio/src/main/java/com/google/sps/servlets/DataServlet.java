@@ -20,15 +20,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.*;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
   private List<String> comments;
-  
-  @Override
-  public void init(){
-      comments = new ArrayList<>();
-  }
   
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -37,12 +40,26 @@ public class DataServlet extends HttpServlet {
           name = "User at "+(String) new Date().toLocaleString();
       }
       String comment = name + ": " + request.getParameter("comment");
-      comments.add(comment);
+      
+      Entity commentEntity = new Entity("Comment");
+      commentEntity.setProperty("comment", comment);
+      commentEntity.setProperty("timestamp", System.currentTimeMillis());
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(commentEntity);
       response.sendRedirect("/index.html");
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    comments = new ArrayList<>();
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    for (Entity entity : results.asIterable()) {
+      long id = entity.getKey().getId();
+      String comment = String.valueOf(id) +"-"+ (String) entity.getProperty("comment");
+      comments.add(comment);
+    }
     response.setContentType("application/json;");
     response.getWriter().println(convertToJSON(comments));
   }
