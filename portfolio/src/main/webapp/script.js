@@ -38,7 +38,7 @@ function getThanosQuote(){
 function getJSONobject(){
     fetch("/data").then(response => response.json()).then(object =>
     {
-        var quoteSection = document.getElementById("quoteSection");
+        var quoteSection = document.getElementById("commentSection");
         buildList(quoteSection, object);
     })
 }

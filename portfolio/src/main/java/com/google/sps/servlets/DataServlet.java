@@ -21,8 +21,46 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
+@WebServlet("/data")
+public class DataServlet extends HttpServlet {
+  private List<String> comments;
+  
+  @Override
+  public void init(){
+      comments = new ArrayList<>();
+  }
+  
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      String name = request.getParameter("userName");
+      if(name.length() == 0){
+          name = "User at "+(String) new Date().toLocaleString();
+      }
+      String comment = name + ": " + request.getParameter("comment");
+      comments.add(comment);
+      response.sendRedirect("/index.html");
+  }
+
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    response.setContentType("application/json;");
+    response.getWriter().println(convertToJSON(comments));
+  }
+
+  /** Returns any Java object in JSON format
+   * 
+   * @param object: Object to be converted
+   * @return String JSON format of the object
+   */
+   private String convertToJSON(Object object){
+       Gson gson = new Gson();
+       return gson.toJson(object);
+   }
+}
+
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/**
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
   private List<String> thanosQuotes;
@@ -54,13 +92,9 @@ public class DataServlet extends HttpServlet {
     response.getWriter().println(convertToJSON(thanosQuotes));
   }
 
-  /** Returns any Java object in JSON format
-   * 
-   * @param object: Object to be converted
-   * @return String JSON format of the object
-   */
    private String convertToJSON(Object object){
        Gson gson = new Gson();
        return gson.toJson(object);
    }
 }
+*/
