@@ -51,7 +51,6 @@ public final class RandomQuoteServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String quote = quotes.get((int) (Math.random() * quotes.size()));
-
     response.setContentType("text/html;");
     response.getWriter().println(quote);
   }

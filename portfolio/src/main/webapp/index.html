@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload = "getJSONobject()">
     <div id="intro">
       <h1>Sena's Portfolio</h1>
       <p>Hello! :) This is my portfolio.</p>
@@ -19,11 +19,29 @@
                 <a href = "https://github.com/iamyevesky">GitHub</a>.
       </p>   
       <p>But first:</p>
-      <!--
+      <p>This is a random feature that says "Hello world" in 4 languages:<p> 
       <button onclick="addRandomGreeting()">Hello</button>
       <p id="greetingContainer"></p>
-      --> 
+      <p>Why is that feature here? Je ne sais pas.</p>
     </div>
+    <p>Please leave below what you think about the site in the comments section:</p>
+    <form action = "/data" method = "POST">
+        <label for="name">Name:</label>
+        <input type = "text" id = "userName" name = "userName" value = "Your name here">
+        <br/>
+        <label for = "comment">Comment:</label>
+        <textarea type = "text" id = "comment" name = "comment">Your comment</textarea>
+        <input type = "submit">
+        <br/><br/>
+    </form>
+    <ul id = "commentSection"></ul>
+    <p>Delete comment: </p>
+    <form action = "/deleteComment" method = "POST">
+        <label for = "idInput">Comment ID marked for deletion:</label>
+        <input type = "text" id = "idInput" name = "idInput" value = "">
+        <br/>
+        <input type = "submit">
+    </form>
     <div id = "memeSection">
         <h2>Favourite memes!</h2>
         <div class = "images">
