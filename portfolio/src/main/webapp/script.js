@@ -50,8 +50,34 @@ function buildList(htmlObject, jsonObject){
     }
 }
 
-function createListElement(string){
-    var element = document.createElement("li");
+function createListElement(list){
+    var element = document.createElement("form");
+    element.action = "/deleteComment";
+    element.method = "POST";
+    element.innerHTML = '';
+    element.appendChild(createListParagraphElement(list[1]));
+    element.appendChild(createInputElement(list[0]));
+    element.appendChild(generateSubmitElement());
+    return element;
+}
+
+function generateSubmitElement(){
+    var element = document.createElement("input");
+    element.type = "submit";
+    element.value = "Delete comment";
+    return element;
+}
+
+function createListParagraphElement(string){
+    var element = document.createElement("p");
     element.textContent = string;
+    return element;
+}
+
+function createInputElement(id){
+    var element = document.createElement("input");
+    element.type = "hidden";
+    element.name = "idInput";
+    element.value = id;
     return element;
 }

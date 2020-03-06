@@ -31,7 +31,7 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.*;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  private List<String> comments;
+  private ArrayList<ArrayList<String>> comments;
   
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -51,13 +51,16 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    comments = new ArrayList<>();
+    comments = new ArrayList<ArrayList<String>>();
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
-      long id = entity.getKey().getId();
-      String comment = String.valueOf(id) +"-"+ (String) entity.getProperty("comment");
+      ArrayList<String> comment = new ArrayList<>();
+      String id = String.valueOf(entity.getKey().getId());
+      String commentString = (String) entity.getProperty("comment");
+      comment.add(id);
+      comment.add(commentString);
       comments.add(comment);
     }
     response.setContentType("application/json;");
