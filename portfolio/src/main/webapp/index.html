@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body onload = "getJSONobject()">
+  <body onload = "getJSONobject(); getLoginForm()">
     <div id="intro">
       <h1>Sena's Portfolio</h1>
       <p>Hello! :) This is my portfolio.</p>
@@ -19,11 +19,13 @@
                 <a href = "https://github.com/iamyevesky">GitHub</a>.
       </p>   
       <p>But first:</p>
-      <p>This is a random feature that says "Hello world" in 4 languages:<p> 
-      <button onclick="addRandomGreeting()">Hello</button>
+      <p>This is a random feature that gives a Thanos quote when clicked:<p> 
+      <button onclick="addRandomThanosQuote()">Get Thanos Quote</button>
       <p id="greetingContainer"></p>
-      <p>Why is that feature here? Je ne sais pas.</p>
     </div>
+    <h2>Comment Section</h2>
+    <div id = "loginSection"></div>
+    <!---
     <p>Please leave below what you think about the site in the comments section:</p>
     <form action = "/data" method = "POST">
         <label for="name">Name:</label>
@@ -34,7 +36,8 @@
         <input type = "submit">
         <br/><br/>
     </form>
-    <h2>Comment Section</h2>
+    -->
+    <h3>Comments</h3>
     <div id = "commentSection">
     </div>
     <div id = "memeSection">
