@@ -28,14 +28,21 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import java.util.*;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  private List<String> comments;
-  
+  private ArrayList<ArrayList<String>> comments;
+  UserService userService = UserServiceFactory.getUserService();
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      String name = request.getParameter("userName");
+      if (!userService.isUserLoggedIn()) {
+        response.sendRedirect("/index.html");
+        return;
+      }
+      String name = getUserName(userService.getCurrentUser().getUserId());
       if(name.length() == 0){
           name = "User at "+(String) new Date().toLocaleString();
       }
@@ -44,6 +51,7 @@ public class DataServlet extends HttpServlet {
       Entity commentEntity = new Entity("Comment");
       commentEntity.setProperty("comment", comment);
       commentEntity.setProperty("timestamp", System.currentTimeMillis());
+      commentEntity.setProperty("UserID", userService.getCurrentUser().getUserId());
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(commentEntity);
       response.sendRedirect("/index.html");
@@ -51,13 +59,16 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    comments = new ArrayList<>();
+    comments = new ArrayList<ArrayList<String>>();
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
-      long id = entity.getKey().getId();
-      String comment = String.valueOf(id) +"-"+ (String) entity.getProperty("comment");
+      ArrayList<String> comment = new ArrayList<>();
+      String id = String.valueOf(entity.getKey().getId());
+      String commentString = (String) entity.getProperty("comment");
+      comment.add(id);
+      comment.add(commentString);
       comments.add(comment);
     }
     response.setContentType("application/json;");
@@ -73,45 +84,19 @@ public class DataServlet extends HttpServlet {
        Gson gson = new Gson();
        return gson.toJson(object);
    }
-}
 
-
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
-/**
-@WebServlet("/data")
-public class DataServlet extends HttpServlet {
-  private List<String> thanosQuotes;
-  
-  @Override
-  public void init(){
-      thanosQuotes = new ArrayList<>();
-      thanosQuotes.add("The hardest choices require the strongest wills.");
-      thanosQuotes.add("I ask you to what end? Dread it. Run from it. "+
-                         "Destiny arrives all "+
-                         "the same.");
-      thanosQuotes.add("I know what it's like to lose. "
-                       +"To feel so desperately that you're right, "+
-                       "yet to fail nonetheless. It's frightening, "+
-                       "turns the legs to jelly.");
-      thanosQuotes.add("Perfectly balanced, as all things should be.");
-      thanosQuotes.add("I do. You are not the only one cursed with knowledge.");
-      thanosQuotes.add("I finally rest and watch the sun rise on a grateful universe.");
-      thanosQuotes.add("Fine! I will do it myself.");
-      thanosQuotes.add("I ignored by destiny once. I cannot do that again, "+
-                        "even for you.");
-      thanosQuotes.add("With all the six stones I could simply snap and they "+
-                       "would cease to exist. I call that mercy");
+   /** Returns the name of the user with id, or null if the user has not set a name. */
+  private String getUserName(String id) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query =
+        new Query("UserInfo")
+            .setFilter(new Query.FilterPredicate("id", Query.FilterOperator.EQUAL, id));
+    PreparedQuery result = datastore.prepare(query);
+    Entity entity = result.asSingleEntity();
+    if (entity == null) {
+      return null;
+    }
+    String name = (String) entity.getProperty("name");
+    return name;
   }
-  
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("application/json;");
-    response.getWriter().println(convertToJSON(thanosQuotes));
-  }
-
-   private String convertToJSON(Object object){
-       Gson gson = new Gson();
-       return gson.toJson(object);
-   }
 }
-*/

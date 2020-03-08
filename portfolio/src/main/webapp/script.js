@@ -15,9 +15,19 @@
 /**
  * Adds a random greeting to the page.
  */
-function addRandomGreeting() {
+function addRandomThanosQuote() {
   const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+      ['The hardest choices require the strongest wills.',
+       'I ask you to what end? Dread it. Run from it. Destiny arrives all the same',
+       'I know what it\'s like to lose. To feel so desperately that you\'re right, yet to fail nonetheless. It\'s frightening'
+        + 'turns the legs to jelly.',
+       'Perfectly balanced, as all things should be.',
+       'I do. You are not the only one cursed with knowledge.',
+       'I finally rest and watch the sun rise on a grateful universe.',
+       'Fine! I will do it myself.',
+       'I ignored by destiny once. I cannot do that again, even for you.',
+       'With all the six stones I could simply snap my fingers and they'+
+       'would cease to exist. I call that mercy'];
 
   // Pick a random greeting.
   const greeting = greetings[Math.floor(Math.random() * greetings.length)];
@@ -32,6 +42,14 @@ function getThanosQuote(){
     {
         var thanosSection = document.getElementById("quoteSection");
         thanosSection.innerText = quote;
+    });
+}
+
+function getLoginForm(){
+    fetch("/login").then(response => response.text()).then(textHTML =>
+    {
+        var loginSection = document.getElementById("loginSection");
+        loginSection.innerHTML = textHTML;
     });
 }
 
@@ -50,8 +68,34 @@ function buildList(htmlObject, jsonObject){
     }
 }
 
-function createListElement(string){
-    var element = document.createElement("li");
+function createListElement(list){
+    var element = document.createElement("form");
+    element.action = "/deleteComment";
+    element.method = "POST";
+    element.innerHTML = '';
+    element.appendChild(createListParagraphElement(list[1]));
+    element.appendChild(createInputElement(list[0]));
+    element.appendChild(generateSubmitElement());
+    return element;
+}
+
+function generateSubmitElement(){
+    var element = document.createElement("input");
+    element.type = "submit";
+    element.value = "Delete comment";
+    return element;
+}
+
+function createListParagraphElement(string){
+    var element = document.createElement("p");
     element.textContent = string;
+    return element;
+}
+
+function createInputElement(id){
+    var element = document.createElement("input");
+    element.type = "hidden";
+    element.name = "idInput";
+    element.value = id;
     return element;
 }
