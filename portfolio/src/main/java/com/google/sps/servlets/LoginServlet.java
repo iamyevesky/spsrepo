@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
 
     // If user is not logged in, show a login form (could also redirect to a login page)
     if (!userService.isUserLoggedIn()) {
-      String loginUrl = userService.createLoginURL("/login");
+      String loginUrl = userService.createLoginURL("/index.html");
       out.println("<p>You are not logged in. Log in to post comments.</p>");
       out.println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
       return;
