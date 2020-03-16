@@ -18,10 +18,28 @@ package com.google.sps;
  * Utility class for creating greeting messages.
  */
 public class Greeter {
+  char [] noChar = {'@', '#', '$', '%'};
+
+  private boolean contains(char [] array, char c){
+    for(char i : array){
+      if(i == c){
+        return true;
+      }
+    }
+    return false;
+  }
+  
   /**
    * Returns a greeting for the given name.
    */
   public String greet(String name) {
-    return "Hello " + name;
+    name = name.trim();
+    String result = "";
+    for(int i = 0; i < name.length(); i++){
+      if (!contains(noChar, name.charAt(i))){
+        result += name.charAt(i);
+      }
+    }
+    return "Hello " + result;
   }
 }

@@ -48,7 +48,7 @@ public class HomeServlet extends HttpServlet {
     }
 
     // User is logged in and has a nickname, so the request can proceed
-    String logoutUrl = userService.createLogoutURL("/home");
+    String logoutUrl = userService.createLogoutURL("/index.html);
     out.println("<h1>Home</h1>");
     out.println("<p>Hello " + nickname + "!</p>");
     out.println("<p>Logout <a href=\"" + logoutUrl + "\">here</a>.</p>");
