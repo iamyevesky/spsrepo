@@ -53,6 +53,14 @@ function getLoginForm(){
     });
 }
 
+function getNameForm(){
+    fetch("/name").then(response => response.text()).then(textHTML =>
+    {
+        var loginSection = document.getElementById("loginSection");
+        loginSection.innerHTML = textHTML;
+    });
+}
+
 function getJSONobject(){
     fetch("/data").then(response => response.json()).then(object =>
     {
@@ -88,7 +96,7 @@ function generateSubmitElement(){
 
 function createListParagraphElement(string){
     var element = document.createElement("p");
-    element.textContent = string;
+    element.innerText = string;
     return element;
 }
 

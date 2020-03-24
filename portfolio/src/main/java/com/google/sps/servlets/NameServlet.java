@@ -42,12 +42,12 @@ public class NameServlet extends HttpServlet {
       String name = getUserName(userService.getCurrentUser().getUserId());
       out.println("<p>Set your name here:</p>");
       out.println("<form method=\"POST\" action=\"/name\">");
-      out.println("<input name=\"name\" value=\"" + name + "\" />");
+      out.println("<input name=\"name\" value=\"" + "Your name" + "\" />");
       out.println("<br/>");
       out.println("<button>Submit</button>");
       out.println("</form>");
     } else {
-      String loginUrl = userService.createLoginURL("/name");
+      String loginUrl = userService.createLoginURL("/index.html");
       out.println("<p>Login <a href=\"" + loginUrl + "\">here</a>.</p>");
     }
   }
@@ -56,7 +56,7 @@ public class NameServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/name");
+      response.sendRedirect("/index.html");
       return;
     }
 

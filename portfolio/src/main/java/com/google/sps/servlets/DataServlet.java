@@ -66,12 +66,12 @@ public class DataServlet extends HttpServlet {
     for (Entity entity : results.asIterable()) {
       ArrayList<String> comment = new ArrayList<>();
       String id = String.valueOf(entity.getKey().getId());
-      String commentString = (String) entity.getProperty("comment");
+      String commentString = String.valueOf(entity.getProperty("comment"));
       comment.add(id);
       comment.add(commentString);
       comments.add(comment);
     }
-    response.setContentType("application/json;");
+    response.setContentType("application/json; charset=utf-8");
     response.getWriter().println(convertToJSON(comments));
   }
 
